@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TIC-TAC-TOE</title>
+        <style>
+body {
+    background: radial-gradient(circle at center, #0f172a, #020617);
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+html, body {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+}
+.appframe {
+    width: min(95vw,560px);
+    background: linear-gradient(145deg, #1e293b, #0f172a);
+    padding: 20px;
+    margin: 40px auto;
+    border-radius: 18px;
+    box-shadow:
+        inset 0 0 12px rgba(255,255,255,0.05),
+        0 15px 40px rgba(0,0,0,0.7);
+    border: 2px solid rgba(148,163,184,0.3);
+}
+h1 {
+    color: #e2e8f0;
+    letter-spacing: 4px;
+    text-shadow: 0 0 12px rgba(56,189,248,0.5);
+}
+#board {
+    width: min(95vw,560px);
+    aspect-ratio: 1/1;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+table {
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    background: rgba(15,23,42,0.8);
+    border: 2px solid rgba(148,163,184,0.3);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+}
+td {
+    border: 1px solid rgba(148,163,184,0.2);
+    position: relative;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+td:hover {
+    background: rgba(56,189,248,0.1);
+}
+.circle::before {
+    content: "◯";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: min(18vw, 90px);
+    color: #38bdf8;
+    text-shadow: 0 0 12px rgba(56,189,248,0.8);
+}
+.cross::before {
+    content: "✕";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: min(18vw, 90px);
+    color: #fb7185;
+    text-shadow: 0 0 12px rgba(251,113,133,0.8);
+}
+.center-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10vw;
+    font-weight: bold;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 0 20px rgba(0,0,0,0.8);
+    pointer-events: none;
+}
+button {
+    background: linear-gradient(145deg, #38bdf8, #2563eb);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: min(6vw,22px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+    transition: 0.2s;
+}
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+}
+#span {
+    margin-top: 10px;
+    font-size: min(4.5vw, 18px);
+    font-weight: bold;
+    padding: 10px 14px;
+    border-radius: 12px;
+    display: inline-block;
+    background: rgba(30,41,59,0.8);
+    color: #e2e8f0;
+    border: 1px solid rgba(148,163,184,0.3);
+}
+@media (max-width: 600px) {
+    .appframe {
+        width: 100%;
+        height: auto;
+        margin: 0;
+        border-radius: 0;
+        padding: 10px;
+    }
+    h1 {
+        font-size: 26px;
+    }
+    button {
+        width: 90%;
+        font-size: 16px;
+        margin: 6px auto;
+        display: block;
+    }
+    .circle::before,
+    .cross::before {
+        font-size: 22vw;
+    }
+    .center-message {
+        font-size: 14vw;
+    }
+}
+a {
+    display: inline-block;
+    background: linear-gradient(145deg, #38bdf8, #2563eb);
+    color: white;
+    text-decoration: none;
+    padding: 10px 18px;
+    margin: 6px 4px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: min(5vw,20px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+    transition: 0.2s;
+    border: 1px solid rgba(148,163,184,0.3);
+}
+a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+    background: linear-gradient(145deg, #60a5fa, #3b82f6);
+}
+a:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+@media (max-width: 600px) {
+    a {
+        width: 90%;
+        display: block;
+        margin: 6px auto;
+        font-size: 16px;
+        text-align: center;
+    }
+}
+h2 {
+    color: #e2e8f0;
+    margin: 10px 0;
+    font-size: min(6vw, 24px);
+    letter-spacing: 2px;
+    text-shadow: 0 0 8px rgba(56,189,248,0.5);
+}
+p {
+    color: #cbd5f5;
+    margin: 8px 0;
+    font-size: min(4.5vw, 16px);
+}
+ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+li {
+    background: rgba(15,23,42,0.8);
+    margin: 6px 0;
+    padding: 10px;
+    border-radius: 10px;
+    color: #e2e8f0;
+    border: 1px solid rgba(148,163,184,0.2);
+    transition: 0.2s;
+    position: relative;
+}
+li:hover {
+    background: rgba(56,189,248,0.15);
+    transform: translateX(5px);
+}
+li:nth-child(1) {
+    color: gold;
+    font-weight: bold;
+}
+li:nth-child(2) {
+    color: silver;
+}
+li:nth-child(3) {
+    color: #cd7f32;
+}
+li::before {
+    content: "🏅 ";
+}
+li {
+    animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+        </style>
+    </head>
+    <body>
+        <div class="appframe">
+            <h1>TIC-TAC-TOE</h1>
+            <div id="buttons"></div>
+            <div id="board"></div>
+        </div>
+        <script>
+            const boards = document.getElementById("board");
+            const buttons = document.getElementById("buttons");
+            let nowPlayer = 1;//丸
+            let board = [];
+            let mode = 0;
+            let name = "";
+            let mine = 1;
+            let ended = false;
+            let side = 3;
+
+            window.onload = () => {start(0);};
+
+            function start(sum) {
+                if (sum === 0) {//mode選択画面
+                    boards.innerHTML = "";
+                    buttons.innerHTML = `<p><button onclick="start(1)">Single-player mode</button><button onclick="start(11)">Two-player mode</button></p>`;
+                }else if (sum === 1 || sum === 11) {//難易度選択画面
+                    if (sum === 1) mode = 10;
+                    else mode = 4;
+                    boards.innerHTML = "";
+                    buttons.innerHTML = `<p><a href="#" onclick="start(0)">Back</a></p>
+                    <p><button onclick="start(3)">3×3</button></p>
+                    <p><button onclick="start(4)">4×4</button></p>
+                    <p><button onclick="start(5)">5×5</button></p>`;
+                }else if (sum >= 3 && sum <= 5) {//game画面
+                    mine = Math.floor(Math.random()*2)+1;
+                    side = sum;
+                    ended = false;
+                    if (mode !== 4) {
+                        if (mine === 1) alert("You are ◯. You go first.");
+                        else alert("You are X. You go second");
+                    }
+                    score = 0;
+                    let moji = mode === 4? "Two-player mode" :  "Single-player mode";
+                    buttons.innerHTML = `<h2>${moji}</h2><p><button onclick="start(0)">Stop</button></p><p id="span"></p>`;
+                    let html = `<table>`;
+                    for (let i = 0; i < side; i++) {
+                        html += `<tr>`;
+                        for (let j = 0; j < side; j++) {
+                            html += `<td id="${i*side+j}" onclick="setUpClickEvents(${i*side+j})"></td>`;
+                        }
+                        html += `</tr>`;
+                    }
+                    html += `</table>`;
+                    boards.innerHTML = html+`<div id="centerMessage" class="center-message"></div>`;
+                    board = new Array(side);
+                    for (let i = 0; i < side; i++) board[i] = new Array(side).fill(0);
+                    nowPlayer = 1;//丸
+                    put();
+                    span();
+                    if (mode !== 4 && nowPlayer !== mine) setTimeout(() => {aiTurn();},1000);
+                }
+            }
+
+            function input() {
+                name = document.getElementById("input").value;
+                document.getElementById("input").classList.remove("empty");
+                if (name.length === 0) document.getElementById("input").classList.add("empty");
+            }
+
+            function minimax(depth,alpha,beta,player) {
+                const moves = canPut();
+                if (depth === 0 || moves.length === 0 || isEnded().isEnded) return evaluateBoard(nowPlayer);
+                let best;
+                if (player === nowPlayer) {
+                    best = -Infinity;
+                    for (let m of moves) {
+                        let backup = JSON.parse(JSON.stringify(board));
+                        board[m.y][m.x] = player;
+                        let val = minimax(depth - 1,alpha,beta,mine);
+                        board = backup;
+                        best = Math.max(best, val);
+                        alpha = Math.max(alpha,val);
+                        if (beta <= alpha) break;
+                    }
+                }else {
+                    best = Infinity;
+                    for (let m of moves) {
+                        let backup = JSON.parse(JSON.stringify(board));
+                        board[m.y][m.x] = player;
+                        let val = minimax(depth - 1,alpha,beta,nowPlayer);
+                        board = backup;
+                        best = Math.min(best, val);
+                        beta = Math.min(beta,val);
+                        if (beta <= alpha) break;
+                    }
+                }
+                return best;
+            }
+
+            function evaluateBoard(player) {
+                let score = 0;
+                if (side !== 4 && board[(side-1)/2][(side-1)/2] === player) score += 20*(10**(side-3));
+                else if (side !== 4 && board[(side-1)/2][(side-1)/2] !== 0) score += 20;
+                const lines = getLines();
+                for (let line of lines) {
+                    let mineCount = 0;
+                    let oppCount = 0;
+                    for (let [y,x] of line) {
+                        if (board[y][x] === player) mineCount++;
+                        else if (board[y][x] !== 0) oppCount++;
+                    }
+                    if (mineCount === 5) score += 10000;
+                    else if (mineCount === 4) score += 1000;
+                    else if (mineCount === 3) score += 100;
+                    else if (mineCount === 2 && oppCount === 0) score += 10;
+                    else if (mineCount === 1 && oppCount === 0) score += 1;
+                    if (oppCount === 5) score -= 10000;
+                    else if (oppCount === 4) score -= 1000;
+                    else if (oppCount === 3) score -= 100;
+                    else if (oppCount === 2 && mineCount === 0) score -= 10;
+                    else if (oppCount === 1 && mineCount === 0) score -= 1;
+                }
+                return score;
+            }
+
+            function getLines() {
+                let lines = [];
+                for (let y = 0; y < side; y++) {
+                    let row = [];
+                    for (let x = 0; x < side; x++) {
+                        row.push([y, x]);
+                    }
+                    lines.push(row);
+                }
+                for (let x = 0; x < side; x++) {
+                    let col = [];
+                    for (let y = 0; y < side; y++) {
+                        col.push([y, x]);
+                    }
+                    lines.push(col);
+                }
+                let diag1 = [];
+                for (let i = 0; i < side; i++) {
+                    diag1.push([i, i]);
+                }
+                lines.push(diag1);
+                let diag2 = [];
+                for (let i = 0; i < side; i++) {
+                    diag2.push([i, side - 1 - i]);
+                }
+                lines.push(diag2);
+                return lines;
+            }
+
+            function send() {
+                if (name.length === 0) return;
+                sendScore();
+                start(3);
+            }
+
+            function span() {
+                let endedList = isEnded();
+                ended = endedList.isEnded;
+                if (ended) {
+                    let winner = endedList.winner;
+                    if (mode === 4) {
+                        let message = "";
+                        if (winner === 1) message = "◯ wins!";
+                        else message = "X wins!";
+                        document.getElementById("centerMessage").innerHTML = message;
+                    }else {
+                        let message = "";
+                        if (winner === mine) message = "You win!";
+                        else message = "You lose!";
+                        document.getElementById("centerMessage").innerHTML = message;
+                    }
+                }else if (canPut().length === 0) {
+                    document.getElementById("centerMessage").innerHTML =  "Draw!"
+                }
+                let turn = "";
+                if (mode === 4) {
+                    if (nowPlayer === 1) turn = "◯'s turn";
+                    else turn = "X's turn";
+                }else{
+                    if (nowPlayer === mine) {
+                        if (mine === 1) turn = "Your turn - ◯";
+                        else turn = "Your turn - X";
+                    }else{
+                        if (mine === 1) turn = "Opponent's turn - X";
+                        else turn = "Opponent's turn - ◯";
+                    }
+                }
+                document.getElementById("span").innerHTML = turn;
+            }
+
+            function isEnded() {
+                for (let y = 0; y < side; y++) {
+                    for (let x = 0; x < side; x++) {
+                        if (board[y][x] === 0) continue;
+                        let winner = board[y][x];
+                        let d = [];
+                        for (let i = -1; i <= 1; i++) {
+                            for (let j = -1; j <= 1; j++) {
+                                if (i === 0 && j === 0) continue;
+                                if (y+i < 0 || y+i >= side || x+j < 0 || x+j >= side) continue;
+                                if (board[y+i][x+j] === winner) d.push({x: j,y: i});
+                            }
+                        }
+                        if (d.length === 0) continue;
+                        for (let dr of d) {
+                            let num = 0;
+                            for (let i = 2; i < side; i++) {
+                                let dx = x+dr.x*i;
+                                let dy = y+dr.y*i;
+                                if (dx < 0 || dx >= side || dy < 0 || dy >= side) continue;
+                                if (board[dy][dx] === winner) num++;
+                            }
+                            if (num === side-2) return {isEnded: true,winner};
+                        }
+                    }
+                }
+                return {isEnded: false,winner: null};
+            }
+
+            function canPut() {
+                let canPut = [];
+                for (let i = 0; i < side; i++) {
+                    for (let j = 0; j < side; j++) {
+                        if (board[i][j] === 0) {
+                            canPut.push({x: j,y: i});
+                        }
+                    }
+                }
+                return canPut;
+            }
+
+            function put() {
+                for (let y = 0; y < side; y++) {
+                    for (let x = 0; x < side; x++) {
+                        let num = board[y][x];
+                        document.getElementById(y*side+x).classList.remove("circle","cross");
+                        if (num === 1) document.getElementById(y*side+x).classList.add("circle");
+                        else if (num === 2) document.getElementById(y*side+x).classList.add("cross");
+                    }
+                }
+            }
+
+            function setUpClickEvents(id) {
+                let x = id%side;
+                let y = Math.floor(id/side);
+                if (board[y][x] !== 0 || (mode !== 4 && nowPlayer !== mine) || ended) return;
+                board[y][x] = nowPlayer;
+                put();
+                nowPlayer = nowPlayer === 1? 2 : 1;
+                span();
+                if (mode !== 4) setTimeout(() => {aiTurn();},1000);
+            }
+
+            function aiTurn() {
+                let moves = canPut();
+                if (ended) return;
+                if (mode === 5) {
+                    m = moves[Math.floor(Math.random()*moves.length)];
+                    board[m.y][m.x] = nowPlayer;
+                }else if (mode === 6) {
+                    let bestMove = null;
+                    let bestScore = -Infinity;
+                    for (let m of moves) {
+                        let backup = JSON.parse(JSON.stringify(board));
+                        board[m.y][m.x] = nowPlayer;
+                        let score = minimax(2,-Infinity,Infinity,mine);
+                        board = backup;
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestMove = m;
+                        }
+                    }
+                    if (bestMove) board[bestMove.y][bestMove.x] = nowPlayer;
+                    else {
+                        let m = moves[Math.floor(Math.random()*moves.length)];
+                        board[m.y][m.x] = nowPlayer;
+                    }
+                }else if (mode === 7) {
+                    let bestMove = null;
+                    let bestScore = -Infinity;
+                    for (let m of moves) {
+                        let backup = JSON.parse(JSON.stringify(board));
+                        board[m.y][m.x] = nowPlayer;
+                        let score = minimax(4,-Infinity,Infinity,mine);
+                        board = backup;
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestMove = m;
+                        }
+                    }
+                    if (bestMove) board[bestMove.y][bestMove.x] = nowPlayer;
+                    else {
+                        let m = moves[Math.floor(Math.random()*moves.length)];
+                        board[m.y][m.x] = nowPlayer;
+                    }
+                }else if (mode === 8) {
+                    let bestMove = null;
+                    let bestScore = -Infinity;
+                    for (let m of moves) {
+                        let backup = JSON.parse(JSON.stringify(board));
+                        board[m.y][m.x] = nowPlayer;
+                        let score = minimax(5,-Infinity,Infinity,mine);
+                        board = backup;
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestMove = m;
+                        }
+                    }
+                    if (bestMove) board[bestMove.y][bestMove.x] = nowPlayer;
+                    else {
+                        let m = moves[Math.floor(Math.random()*moves.length)];
+                        board[m.y][m.x] = nowPlayer;
+                    }
+                }else if (mode === 9) {
+                    let bestMove = null;
+                    let bestScore = -Infinity;
+                    for (let m of moves) {
+                        let backup = JSON.parse(JSON.stringify(board));
+                        board[m.y][m.x] = nowPlayer;
+                        let score = minimax(6,-Infinity,Infinity,mine);
+                        board = backup;
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestMove = m;
+                        }
+                    }
+                    if (bestMove) board[bestMove.y][bestMove.x] = nowPlayer;
+                    else {
+                        let m = moves[Math.floor(Math.random()*moves.length)];
+                        board[m.y][m.x] = nowPlayer;
+                    }
+                }else if (mode === 10) {
+                    if (side === 3) depth = 8;
+                    else depth = 4;
+                    let bestMove = null;
+                    let bestScore = -Infinity;
+                    for (let m of moves) {
+                        let backup = JSON.parse(JSON.stringify(board));
+                        board[m.y][m.x] = nowPlayer;
+                        let score = minimax(depth,-Infinity,Infinity,mine);
+                        board = backup;
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestMove = m;
+                        }
+                    }
+                    if (bestMove) board[bestMove.y][bestMove.x] = nowPlayer;
+                    else {
+                        let m = moves[Math.floor(Math.random()*moves.length)];
+                        board[m.y][m.x] = nowPlayer;
+                    }
+                }
+                put();
+                nowPlayer = nowPlayer === 1? 2 : 1;
+                span();
+            }
+        </script>
+    </body>
+</html>
